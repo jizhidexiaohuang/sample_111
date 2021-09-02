@@ -602,11 +602,11 @@ $(function () {
           loginRoom = true;
 
           console.log(streamList)
-          $('.remoteVideo').html('')
-          for (var index = 0; index < streamList.length; index++) {
-            $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
-            play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
-          }
+          // $('.remoteVideo').html('')
+          // for (var index = 0; index < streamList.length; index++) {
+          //   $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
+          //   play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
+          // }
 
           streamId = new Date() + '';
           //开始预览本地视频
