@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="./lib/bootstrap.min.css" />
+  <style>
+    #previewLabel {
+      display: block;
+    }
+    #boardBox {
+      width: 500px;
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+    .color-list {
+      width: 100%;
+    }
+    .color-list ul{
+      list-style: none;
+      float: left;
+    }
+    .color-list ul li {
+      width: 20px;
+      height: 20px;
+      border-radius: 2px;
+      float: left;
+      cursor: pointer;
+    }
+    #viewTool {
+      float: left;
+    }
+    .page-item {
+      float: left;
+      position: relative;
+      margin-left: 20px;
+    }
+    .page-item span {
+      font-size: 14px;
+      color: #a5a0a0;
+      cursor: pointer;
+    }
+    .red {
+      background-color: red;
+    }
+    .orange {
+      background-color: orange;
+    }
+    .black {
+      background-color: black;
+    }
+    .green {
+      background-color: green;
+    }
+  </style>
+  <title>zego jssdk demo</title>
+</head>
+
+<body>
+
+  <div class="container-fluid" style="margin-top: 1%;">
+
+    <div class="row">
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="audioList">音频设备</label>
+          <select class="form-control d-inline" id="audioList">
+
+          </select>
+        </div>
+      </div>
+
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">视频设备</label>
+          <select class="form-control d-inline" id="videoList">
+
+          </select>
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="roomId">房间号</label>
+          <input type="email" class="form-control d-inline" id="roomId" aria-describedby="emailHelp"
+            placeholder="请输入房间号" value="999">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">推流编码</label>
+          <select class="form-control d-inline" id="videoCodeType">
+            <option value="H264">H264</option>
+            <option value="VP8">VP8</option>
+            <option value="VP9">VP9</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label>视频码率</label>
+          <input type="email" class="form-control d-inline" id="videoBitRateInput" aria-describedby="emailHelp"
+            placeholder="请输入音频码率" value="1200">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label=>音频码率</label=>
+          <input type="email" class="form-control d-inline" id="audioBitRateInput" aria-describedby="emailHelp"
+            placeholder="请输入音频码率" value="48000">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">降噪</label>
+          <select class="form-control d-inline" id="noiseSuppression">
+            <option value="1">开</option>
+            <option value="0">关</option>
+          </select>
+
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">自动增益</label>
+          <select class="form-control d-inline" id="autoGainControl">
+            <option value="1">开</option>
+            <option value="0">关</option>
+          </select>
+
+        </div>
+      </div>
+
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">回声消除</label>
+          <select class="form-control d-inline" id="echoCancellation">
+            <option value="1">开</option>
+            <option value="0">关</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="videoList">tcp</label>
+          <select class="form-control d-inline" id="turnOverTcpOnly">
+            <option value="0">关</option>
+            <option value="1">开</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="audioList">推流质量</label>
+          <select class="form-control d-inline" id="videoQuality">
+            <option value="1">标清</option>
+            <option value="2" selected>高清</option>
+            <option value="3">超清</option>
+            <option value="4">自定义</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="roomId">自定义宽</label>
+          <input type="email" class="form-control d-inline" id="width" aria-describedby="emailHelp" placeholder="请输间隔"
+            value="720">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="roomId">自定义高</label>
+          <input type="email" class="form-control d-inline" id="height" aria-describedby="emailHelp" placeholder="请输间隔"
+            value="1280">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="roomId">自定义帧率</label>
+          <input type="email" class="form-control d-inline" id="frameRate" aria-describedby="emailHelp"
+            placeholder="请输间隔" value="20">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="selfDomain">文件转码服务器地址</label>
+          <input type="text" class="form-control d-inline" id="selfDomain" aria-describedby="emailHelp"
+            placeholder="请输入正确的服务器地址" value="">
+        </div>
+      </div>
+
+      <div class="col-sm col-3">
+        <div class="form-group">
+          <label for="audioList">是否测试环境 (选择“否”之前，请先填入服务器地址)</label>
+          <select class="form-control d-inline" id="isTest">
+            <option value="1">是</option>
+            <option value="2">否</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm">
+        <button type="button" id="loginHall" class="btn btn-primary btn-sm">进入大厅</button>
+        <button type="button" id="logoutHall" class="btn btn-primary btn-sm">退出大厅</button>
+        <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
+        <button type="button" id="enterRoom" class="btn btn-primary btn-sm">进入房间</button>
+        <button type="button" id="startPublishing" class="btn btn-primary btn-sm">开始推流</button>
+        <button type="button" id="stopPublishing" class="btn btn-primary btn-sm">停止推流</button>
+        <button type="button" id="listenRoom" class="btn btn-primary btn-sm">监听房间</button>
+        <button type="button" id="leaveRoom" class="btn btn-primary btn-sm">离开房间</button>
+
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 1%;">
+      <div class="col-sm">
+        <button type="button" id="screenShot" class="btn btn-primary btn-sm">屏幕共享</button>
+        <button type="button" id="stopScreenShot" class="btn btn-primary btn-sm">停止屏幕共享</button>
+        <button type="button" id="startRecord" class="btn btn-primary btn-sm">服务端录制开始</button>
+        <button type="button" id="pauseRedord" class="btn btn-primary btn-sm">服务端录制结束</button>
+        <button type="button" id="snapshot" class="btn btn-primary btn-sm">截屏</button>
+        <button type="button" id="audioMix" class="btn btn-primary btn-sm">混音</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 1%;">
+      <div class="col-sm">
+        <button type="button" id="createBoard" class="btn btn-primary btn-sm">创建空白白板</button>
+        <button type="button" onclick="document.getElementById('file').click();" class="btn btn-primary btn-sm">文件白板</button>
+        <input type="file" style="position: absolute; opacity: 0; z-index: -1;" id="file"/>
+        <button type="button" id="changeBoard" class="btn btn-primary btn-sm">切换白板</button>
+        <button type="button" id="destroyBoard" class="btn btn-primary btn-sm">销毁白板</button>
+      </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 15px;">
+      <div class="col-sm">
+        <label id="previewLabel"></label>
+        <video id="previewVideo" autoplay muted playsinline controls>
+          <!--<source src="./big_buck_bunny.mp4" type="video/mp4"/>-->
+        </video>
+      </div>
+      <div class="col-sm remoteVideo">
+        <video autoplay muted playsinline controls></video>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 15px;">
+      <img id="snapshotImg" src="" />
+    </div>
+
+  </div>
+
+  <!--<video   autoplay  playsinline controls>-->
+  <!--<source src="./big_buck_bunny.mp4" type="video/mp4"/>-->
+  <!--</video>-->
+
+  <!--<video   autoplay  playsinline controls>-->
+  <!--<source src="./big_buck_bunny.mp4" type="video/mp4"/>-->
+  <!--</video>-->
+  <!--src="https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"-->
+</body>
+<script src="./js/vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
+  console.log('Hello world');
+</script>
+<!-- Bootstrap js -->
+<script src="./lib/jquery-3.3.1.min.js"></script>
+<script src="./lib/popper.min.js"></script>
+<script src="./lib/bootstrap.min.js"></script>
+<script src="./lib/base64.min.js"></script>
+<script src="./lib/md5.min.js"></script>
+<!--&lt;!&ndash; zego js sdk &ndash;&gt;-->
+<!--<script src="../dist/jZego-rtc.js"></script>-->
+<script src="./js/jZego-rtc-1.3.10.js"></script>
+<script src="./js/ZegoExpressDocsWeb.js"></script>
+<!--<script src="./js/jZego-rtc.js_bak20210714"></script>-->
+<!--<script src="../node_modules/choui-zego-rtc/jZego-rtc.js"></script>-->
+<script src="index.js"></script>
+
+</html>
