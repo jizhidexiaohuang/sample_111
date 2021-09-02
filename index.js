@@ -887,7 +887,7 @@ function startVideoTalk({
 
   userRole = role;
 
-  getBoardFirst(); // 获取房间当前已有的白板, board.js
+  // getBoardFirst(); // 获取房间当前已有的白板, board.js
 
   //座席端
   if (role === 1) {     //坐席端
