@@ -310,13 +310,31 @@ function listen() {
       alert('重连成功')
     },
 
-//    onStreamUpdated: function (type, streamList) {
-//      if (type == 0) {
-//
-//        recordConfig.remoteUserid = streamList[0].user_id
-//      }
+  onStreamUpdated: function (type, streamList) {
+    if (type == 0) {
+      for (var i = 0; i < streamList.length; i++) {
+        console.info(streamList[i].stream_id + ' was added');
+        useLocalStreamList.push(streamList[i]);
+        if (streamType !== 1) {
+          $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
+          play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
+        }
+      }
 
- //   },
+    } else if (type == 1) {
+      for (var k = 0; k < useLocalStreamList.length; k++) {
+        for (var j = 0; j < streamList.length; j++) {
+          if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
+            zg.stopPlayingStream(useLocalStreamList[k].stream_id);
+            console.info(useLocalStreamList[k].stream_id + 'was devared');
+            useLocalStreamList.splice(k, 1);
+            $('.remoteVideo video:eq(' + k + ')').remove();
+            break;
+          }
+        }
+      }
+    }
+  },
 
     onStreamExtraInfoUpdated: function (streamList) {
       console.log('onStreamExtraInfoUpdated');
@@ -577,7 +595,6 @@ $(function () {
             return;
           }
 
-          streamId = _config.idName;
 
           console.log('previewConfig',getPreviewConfig())
           console.log(`login success`);
@@ -585,10 +602,13 @@ $(function () {
           loginRoom = true;
 
           console.log(streamList)
+          $('.remoteVideo').html('')
           for (var index = 0; index < streamList.length; index++) {
             $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
             play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
           }
+
+          streamId = new Date() + '';
           //开始预览本地视频
           doPreviewPublish()
           
@@ -621,8 +641,18 @@ $(function () {
             //playType: 'all',
             videoDecodeType: 'H264'
           });
-          console.log(result)
 
+          streamId = new Date().getTime() + ''
+
+          console.log(result)
+          if (!result) {
+            alert('哎呀，播放失败啦');
+            video.style = 'display:none';
+            console.error("play " + el.nativeElement.id + " return " + result);
+        
+          } else {
+            $('.remoteVideo video:last-child')[0].muted = false;
+          }
           // startVideoTalk({
           //   role: 0,
           //   streamList,
