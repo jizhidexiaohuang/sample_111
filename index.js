@@ -602,26 +602,26 @@ $(function () {
 
           loginRoom = true;
 
-          // console.log(streamList)
-          // $('.remoteVideo').html('')
-          // for (var index = 0; index < streamList.length; index++) {
-          //   $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
-          //   play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
-          // }
+          console.log(streamList)
+          $('.remoteVideo').html('')
+          for (var index = 0; index < streamList.length; index++) {
+            $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
+            play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
+          }
 
           //开始预览本地视频
-          // doPreviewPublish()
+          doPreviewPublish()
 
-          startVideoTalk({
-            role: 1,
-            streamList,
-            previewConfig: getPreviewConfig(),
-            localVideo: previewVideo,
-            remoteVideo: $('.remoteVideo video:eq(0)')[0],
-            streamId: streamId
-          }, err => {
-            alert(JSON.stringify(err));
-          });
+          // startVideoTalk({
+          //   role: 1,
+          //   streamList,
+          //   previewConfig: getPreviewConfig(),
+          //   localVideo: previewVideo,
+          //   remoteVideo: $('.remoteVideo video:eq(0)')[0],
+          //   streamId: streamId
+          // }, err => {
+          //   alert(JSON.stringify(err));
+          // });
 
         }, err => {
           alert(err.code + err.msg)
