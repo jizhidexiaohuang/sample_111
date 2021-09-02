@@ -310,31 +310,31 @@ function listen() {
       alert('重连成功')
     },
 
-    // onStreamUpdated: function (type, streamList) {
-    //   if (type == 0) {
-    //     for (var i = 0; i < streamList.length; i++) {
-    //       console.info(streamList[i].stream_id + ' was added');
-    //       useLocalStreamList.push(streamList[i]);
-    //       if (streamType !== 1) {
-    //         $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
-    //         play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
-    //       }
-    //     }
+    onStreamUpdated: function (type, streamList) {
+      if (type == 0) {
+        for (var i = 0; i < streamList.length; i++) {
+          console.info(streamList[i].stream_id + ' was added');
+          useLocalStreamList.push(streamList[i]);
+          if (streamType !== 1) {
+            $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
+            play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
+          }
+        }
 
-    //   } else if (type == 1) {
-    //     for (var k = 0; k < useLocalStreamList.length; k++) {
-    //       for (var j = 0; j < streamList.length; j++) {
-    //         if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
-    //           zg.stopPlayingStream(useLocalStreamList[k].stream_id);
-    //           console.info(useLocalStreamList[k].stream_id + 'was devared');
-    //           useLocalStreamList.splice(k, 1);
-    //           $('.remoteVideo video:eq(' + k + ')').remove();
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
+      } else if (type == 1) {
+        for (var k = 0; k < useLocalStreamList.length; k++) {
+          for (var j = 0; j < streamList.length; j++) {
+            if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
+              zg.stopPlayingStream(useLocalStreamList[k].stream_id);
+              console.info(useLocalStreamList[k].stream_id + 'was devared');
+              useLocalStreamList.splice(k, 1);
+              $('.remoteVideo video:eq(' + k + ')').remove();
+              break;
+            }
+          }
+        }
+      }
+    },
 
     onStreamExtraInfoUpdated: function (streamList) {
       console.log('onStreamExtraInfoUpdated');
@@ -602,26 +602,26 @@ $(function () {
 
           loginRoom = true;
 
-          console.log(streamList)
-          $('.remoteVideo').html('')
-          for (var index = 0; index < streamList.length; index++) {
-            $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
-            play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
-          }
+          // console.log(streamList)
+          // $('.remoteVideo').html('')
+          // for (var index = 0; index < streamList.length; index++) {
+          //   $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
+          //   play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
+          // }
 
-          //开始预览本地视频
-          doPreviewPublish()
+          // // 开始预览本地视频
+          // doPreviewPublish()
 
-          // startVideoTalk({
-          //   role: 1,
-          //   streamList,
-          //   previewConfig: getPreviewConfig(),
-          //   localVideo: previewVideo,
-          //   remoteVideo: $('.remoteVideo video:eq(0)')[0],
-          //   streamId: streamId
-          // }, err => {
-          //   alert(JSON.stringify(err));
-          // });
+          startVideoTalk({
+            role: 1,
+            streamList,
+            previewConfig: getPreviewConfig(),
+            localVideo: previewVideo,
+            remoteVideo: $('.remoteVideo video:eq(0)')[0],
+            streamId: streamId
+          }, err => {
+            alert(JSON.stringify(err));
+          });
 
         }, err => {
           alert(err.code + err.msg)
