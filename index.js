@@ -585,6 +585,10 @@ $(function () {
           loginRoom = true;
 
           console.log(streamList)
+          for (var index = 0; index < streamList.length; index++) {
+            $('.remoteVideo').append($('<video  autoplay muted playsinline controls ></video>'));
+            play(streamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
+          }
           //开始预览本地视频
           doPreviewPublish()
           
@@ -617,6 +621,7 @@ $(function () {
             //playType: 'all',
             videoDecodeType: 'H264'
           });
+          console.log(result)
 
           // startVideoTalk({
           //   role: 0,
