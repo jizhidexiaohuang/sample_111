@@ -584,20 +584,20 @@ $(function () {
 
           loginRoom = true;
 
-
+          console.log(streamList)
           //开始预览本地视频
-          //doPreviewPublish()
+          doPreviewPublish()
           
-          startVideoTalk({
-            role: 1,
-            streamList,
-            previewConfig: getPreviewConfig(),
-            localVideo: previewVideo,
-            remoteVideo: $('.remoteVideo video:eq(0)')[0],
-            streamId: streamId
-          }, err => {
-            alert(JSON.stringify(err));
-          });
+          // startVideoTalk({
+          //   role: 1,
+          //   streamList,
+          //   previewConfig: getPreviewConfig(),
+          //   localVideo: previewVideo,
+          //   remoteVideo: $('.remoteVideo video:eq(0)')[0],
+          //   streamId: streamId
+          // }, err => {
+          //   alert(JSON.stringify(err));
+          // });
 
         }, err => {
           alert(err.code + err.msg)
@@ -613,14 +613,19 @@ $(function () {
           //play(streamList[0].stream_id, previewVideo);
           streamId = _config.idName;
 
-          startVideoTalk({
-            role: 0,
-            streamList,
-            previewConfig: getPreviewConfig(),
-            localVideo: previewVideo,
-            remoteVideo: $('.remoteVideo video:eq(0)')[0],
-            streamId: streamId
+          var result = zg.startPlayingStream(streamList[0].stream_id, $('.remoteVideo video:last-child')[0], '', {
+            //playType: 'all',
+            videoDecodeType: 'H264'
           });
+
+          // startVideoTalk({
+          //   role: 0,
+          //   streamList,
+          //   previewConfig: getPreviewConfig(),
+          //   localVideo: previewVideo,
+          //   remoteVideo: $('.remoteVideo video:eq(0)')[0],
+          //   streamId: streamId
+          // });
 
         }, err => {
           alert(err.code + err.msg)
