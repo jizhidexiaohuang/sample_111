@@ -635,32 +635,31 @@ $(function () {
           console.log('streamList:', streamList)
 
           //play(streamList[0].stream_id, previewVideo);
-          streamId = _config.idName;
 
-          var result = zg.startPlayingStream(streamList[0].stream_id, $('.remoteVideo video:last-child')[0], '', {
-            //playType: 'all',
-            videoDecodeType: 'H264'
-          });
-
-          streamId = new Date().getTime() + ''
-
-          console.log(result)
-          if (!result) {
-            alert('哎呀，播放失败啦');
-            video.style = 'display:none';
-            console.error("play " + el.nativeElement.id + " return " + result);
-
-          } else {
-            $('.remoteVideo video:last-child')[0].muted = false;
-          }
-          // startVideoTalk({
-          //   role: 0,
-          //   streamList,
-          //   previewConfig: getPreviewConfig(),
-          //   localVideo: previewVideo,
-          //   remoteVideo: $('.remoteVideo video:eq(0)')[0],
-          //   streamId: streamId
+          // var result = zg.startPlayingStream(streamList[0].stream_id, $('.remoteVideo video:last-child')[0], '', {
+          //   //playType: 'all',
+          //   videoDecodeType: 'H264'
           // });
+
+          // streamId = new Date().getTime() + ''
+
+          // if (!result) {
+          //   alert('哎呀，播放失败啦');
+          //   video.style = 'display:none';
+          //   console.error("play " + el.nativeElement.id + " return " + result);
+
+          // } else {
+          //   $('.remoteVideo video:last-child')[0].muted = false;
+          // }
+
+          startVideoTalk({
+            role: 0,
+            streamList,
+            previewConfig: getPreviewConfig(),
+            localVideo: previewVideo,
+            remoteVideo: $('.remoteVideo video:eq(0)')[0],
+            streamId: streamId
+          });
 
         }, err => {
           alert(err.code + err.msg)
