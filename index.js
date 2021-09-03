@@ -950,27 +950,27 @@ function startVideoTalk({
         });
         console.log("推流了:" + streamId)
       }  // 等待客户推流
-      zg.onStreamUpdated = (type, streamListAfter) => {
-        let { stream_id, extra_info } = streamListAfter[0];
-        let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
-        if (type == 0) {
-          // 拉去用户端流
-          console.log("2收到流更新了,流名是:" + stream_id)
-          recordConfig.remoteUserid = streamListAfter[0].user_id
-          zg.startPlayingStream(stream_id, remoteVideo, '', {
-            videoDecodeType: videoCodeType || 'H264'
-          });
-          // remoteVideo.muted = false;
-          // 根据用户端的流附加消息进行推流
-          zg.startPublishingStream(streamId, localVideo, extra_info, {
-            videoDecodeType: videoCodeType || 'H264'
-          });
-        } else {
-          // 收到流删除后停止拉流并退出
-          //		  alert("对方已退出房间,已自动关闭此房间");
-          //         leaveRoom();
-        }
-      }
+      // zg.onStreamUpdated = (type, streamListAfter) => {
+      //   let { stream_id, extra_info } = streamListAfter[0];
+      //   let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
+      //   if (type == 0) {
+      //     // 拉去用户端流
+      //     console.log("2收到流更新了,流名是:" + stream_id)
+      //     recordConfig.remoteUserid = streamListAfter[0].user_id
+      //     zg.startPlayingStream(stream_id, remoteVideo, '', {
+      //       videoDecodeType: videoCodeType || 'H264'
+      //     });
+      //     // remoteVideo.muted = false;
+      //     // 根据用户端的流附加消息进行推流
+      //     zg.startPublishingStream(streamId, localVideo, extra_info, {
+      //       videoDecodeType: videoCodeType || 'H264'
+      //     });
+      //   } else {
+      //     // 收到流删除后停止拉流并退出
+      //     //		  alert("对方已退出房间,已自动关闭此房间");
+      //     //         leaveRoom();
+      //   }
+      // }
 
     }, (err) => {
       console.error('预览失败', err);
@@ -1020,52 +1020,52 @@ function startVideoTalk({
         }
       }
 
-      zg.onPublishStateUpdate = (type, streamid, error) => {
+      // zg.onPublishStateUpdate = (type, streamid, error) => {
 
-        console.log("type == " + type);
-        console.log("streamid == " + streamid)
-        console.log("error == " + error);
+      //   console.log("type == " + type);
+      //   console.log("streamid == " + streamid)
+      //   console.log("error == " + error);
 
-        if (type === 1 && publishTryCount === 0) {
-          publishTryCount++;
-          let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
-          if (videCodeType) {
-            zg.stopPublishingStream(streamid);
-            const extraInfo = { videCodeType };
-            zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
-              videoDecodeType: videCodeType
-            });
-          } else {
-            console.error('没有可用视频编码类型');
-          }
-        }
+      //   if (type === 1 && publishTryCount === 0) {
+      //     publishTryCount++;
+      //     let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
+      //     if (videCodeType) {
+      //       zg.stopPublishingStream(streamid);
+      //       const extraInfo = { videCodeType };
+      //       zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
+      //         videoDecodeType: videCodeType
+      //       });
+      //     } else {
+      //       console.error('没有可用视频编码类型');
+      //     }
+      //   }
 
 
-        if (type == 0) {
-          // 混音
-          var audioMixConfig = {
-            streamId: _config.idName,
-            effectId: 1,
-            loop: false,
-            replace: true
-          }
-          // var url = './assets/applaud.mp3';
-          //var url = 'https://bpic.588ku.com/audio_copy/audio/18/08/24/9841faee97016cdd91720970fd984204.mp3';
-          var url = 'https://kfjigou.yjbtest.com:9999/api/mp3/blink.mp3';
-          //          zg.preloadEffect(1, url, ()=> {
-          //            console.log('music preolad');
-          //         console.log("加入房间混音状态:" + zg.ac.state);
-          //            zg.playEffect(audioMixConfig, () => {
-          //              console.warn('start play')
-          //            console.log("正在混音:" + zg.ac.state);
-          //            }, () => {
-          //              console.warn('play end');
-          //           console.log("混音结束后:" + zg.ac.state);
-          //             zg.unloadEffect(1,_config.idName);
-          //           })
-          //         });
-        }
-      }
+      //   if (type == 0) {
+      //     // 混音
+      //     var audioMixConfig = {
+      //       streamId: _config.idName,
+      //       effectId: 1,
+      //       loop: false,
+      //       replace: true
+      //     }
+      //     // var url = './assets/applaud.mp3';
+      //     //var url = 'https://bpic.588ku.com/audio_copy/audio/18/08/24/9841faee97016cdd91720970fd984204.mp3';
+      //     var url = 'https://kfjigou.yjbtest.com:9999/api/mp3/blink.mp3';
+      //     //          zg.preloadEffect(1, url, ()=> {
+      //     //            console.log('music preolad');
+      //     //         console.log("加入房间混音状态:" + zg.ac.state);
+      //     //            zg.playEffect(audioMixConfig, () => {
+      //     //              console.warn('start play')
+      //     //            console.log("正在混音:" + zg.ac.state);
+      //     //            }, () => {
+      //     //              console.warn('play end');
+      //     //           console.log("混音结束后:" + zg.ac.state);
+      //     //             zg.unloadEffect(1,_config.idName);
+      //     //           })
+      //     //         });
+      //   }
+      // }
 
       // 	    zg.unloadEffect(1,_config.idName);
     }, () => {
