@@ -310,31 +310,39 @@ function listen() {
       alert('重连成功')
     },
 
-    // onStreamUpdated: function (type, streamList) {
-    //   if (type == 0) {
-    //     for (var i = 0; i < streamList.length; i++) {
-    //       console.info(streamList[i].stream_id + ' was added');
-    //       useLocalStreamList.push(streamList[i]);
-    //       if (streamType !== 1) {
-    //         $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
-    //         play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
-    //       }
-    //     }
+    onStreamUpdated: function (type, streamList) {
+      console.log(type)
+      console.log(streamList)
+      console.log('onStreamUpdated')
+      if(type == 0){
+        zg.startPlayingStream(streamList[0].stream_id, $('.remoteVideo video:last-child')[0], "", {
+          videoDecodeType: 'H264'
+        })
+      }
+      // if (type == 0) {
+      //   for (var i = 0; i < streamList.length; i++) {
+      //     console.info(streamList[i].stream_id + ' was added');
+      //     useLocalStreamList.push(streamList[i]);
+      //     if (streamType !== 1) {
+      //       $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
+      //       play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
+      //     }
+      //   }
 
-    //   } else if (type == 1) {
-    //     for (var k = 0; k < useLocalStreamList.length; k++) {
-    //       for (var j = 0; j < streamList.length; j++) {
-    //         if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
-    //           zg.stopPlayingStream(useLocalStreamList[k].stream_id);
-    //           console.info(useLocalStreamList[k].stream_id + 'was devared');
-    //           useLocalStreamList.splice(k, 1);
-    //           $('.remoteVideo video:eq(' + k + ')').remove();
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
+      // } else if (type == 1) {
+      //   for (var k = 0; k < useLocalStreamList.length; k++) {
+      //     for (var j = 0; j < streamList.length; j++) {
+      //       if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
+      //         zg.stopPlayingStream(useLocalStreamList[k].stream_id);
+      //         console.info(useLocalStreamList[k].stream_id + 'was devared');
+      //         useLocalStreamList.splice(k, 1);
+      //         $('.remoteVideo video:eq(' + k + ')').remove();
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
+    },
 
     onStreamExtraInfoUpdated: function (streamList) {
       console.log('onStreamExtraInfoUpdated');
@@ -420,7 +428,6 @@ function listen() {
   for (var key in _config) {
     zg[key] = _config[key]
   }
-
 }
 
 
@@ -595,7 +602,7 @@ $(function () {
             return;
           }
 
-          streamId = new Date() + '';
+          streamId = new Date().getTime() + '';
 
           console.log('previewConfig', getPreviewConfig())
           console.log(`login success`);
@@ -611,7 +618,8 @@ $(function () {
 
           // // 开始预览本地视频
           // doPreviewPublish()
-
+          console.log(streamList)
+          console.log('1111111111--' + streamId)
           startVideoTalk({
             role: 1,
             streamList,
@@ -641,7 +649,7 @@ $(function () {
           //   videoDecodeType: 'H264'
           // });
 
-          // streamId = new Date().getTime() + ''
+          streamId = new Date().getTime() + ''
 
           // if (!result) {
           //   alert('哎呀，播放失败啦');
@@ -651,7 +659,8 @@ $(function () {
           // } else {
           //   $('.remoteVideo video:last-child')[0].muted = false;
           // }
-
+          console.log(streamList)
+          console.log('000000000--' + streamId)
           startVideoTalk({
             role: 0,
             streamList,
@@ -922,7 +931,7 @@ function startVideoTalk({
   streamId
 }, errCallBack) {
   let publishTryCount = 0;
-
+  let videoCodeType = $('#videoCodeType').val();
   userRole = role;
 
   // getBoardFirst(); // 获取房间当前已有的白板, board.js
@@ -933,23 +942,28 @@ function startVideoTalk({
     zg.startPreview(localVideo, previewConfig, () => {
       // 客户已经推流
       isPreviewed = true;
-      if (streamList && streamList.length > 0) {
-        let { stream_id, extra_info } = streamList[0];
-        let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
-        //拉取用户端流
-        recordConfig.remoteUserid = streamList[0].user_id
-        console.log("1收到流更新了,流名是:" + stream_id)
+      // if (streamList && streamList.length > 0) {
+      //   let { stream_id, extra_info } = streamList[0];
+      //   let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
+      //   //拉取用户端流
+      //   recordConfig.remoteUserid = streamList[0].user_id
+      //   console.log("1收到流更新了,流名是:" + stream_id)
 
-        zg.startPlayingStream(stream_id, remoteVideo, '', {
-          videoDecodeType: videoCodeType || 'H264'
-        });
-        //remoteVideo.muted = false;
-        //根据用户端的流附加消息进行推流
-        zg.startPublishingStream(streamId, localVideo, extra_info, {
-          videoDecodeType: videoCodeType || 'H264'
-        });
-        console.log("推流了:" + streamId)
-      }  // 等待客户推流
+      //   zg.startPlayingStream(stream_id, remoteVideo, '', {
+      //     videoDecodeType: videoCodeType || 'H264'
+      //   });
+      //   //remoteVideo.muted = false;
+      //   //根据用户端的流附加消息进行推流
+      //   zg.startPublishingStream(streamId, localVideo, extra_info, {
+      //     videoDecodeType: videoCodeType || 'H264'
+      //   });
+      //   console.log("推流了:" + streamId)
+      // }  
+      zg.startPublishingStream(streamId, localVideo, "", {
+        videoDecodeType: 'H264'
+      });
+      // console.log("推流了:" + streamId)
+      // 等待客户推流
       // zg.onStreamUpdated = (type, streamListAfter) => {
       //   let { stream_id, extra_info } = streamListAfter[0];
       //   let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
@@ -978,99 +992,127 @@ function startVideoTalk({
 
 
   } else if (role === 0) { // 用户端
-
-    // 直接推流
-    ZegoClient.supportVideoCodeType(({
-      H264,
-      VP8,
-      Vp9,
-      H265
-    }) => {
-      // 开启预览
-      zg.startPreview(localVideo, previewConfig, () => {
-        isPreviewed = true;
-        let videoCodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
-        //        let videoCodeType = 'H264';
-        if (videoCodeType) {
-          const extraInfo = { videoCodeType };
-          // 根据检测结果选择推流的编码格式并带上流附加消息
-          zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
-            videoDecodeType: videoCodeType
-          });
-        } else {
-          console.error('没有可用视频编码类型');
-        }
-
-      }, (err) => {
-        console.error('预览失败', err);
+    // 开启预览
+    zg.startPreview(localVideo, previewConfig, () => {
+      isPreviewed = true;
+      zg.startPublishingStream(streamId, localVideo, "", {
+        videoDecodeType: videoCodeType
       });
+      if(streamList && streamList.length > 0){
+        
+        zg.startPlayingStream(streamList[0].stream_id, remoteVideo, "", {
+          videoDecodeType: videoCodeType || 'H264'
+        })
 
-      zg.onStreamUpdated = (type, streamListAfter) => {
-        if (type == 0) {
-          recordConfig.remoteUserid = streamListAfter[0].user_id
-          let { stream_id, extra_info } = streamListAfter[0];
-          let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
-          zg.startPlayingStream(stream_id, remoteVideo, '', {
-            videoDecodeType: videoCodeType
-          });
-          // remoteVideo.muted = false;
-        } else {
-          // 收到流删除后退出
-          leaveRoom();
-        }
       }
 
-      // zg.onPublishStateUpdate = (type, streamid, error) => {
-
-      //   console.log("type == " + type);
-      //   console.log("streamid == " + streamid)
-      //   console.log("error == " + error);
-
-      //   if (type === 1 && publishTryCount === 0) {
-      //     publishTryCount++;
-      //     let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
-      //     if (videCodeType) {
-      //       zg.stopPublishingStream(streamid);
-      //       const extraInfo = { videCodeType };
-      //       zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
-      //         videoDecodeType: videCodeType
-      //       });
-      //     } else {
-      //       console.error('没有可用视频编码类型');
-      //     }
-      //   }
-
-
-      //   if (type == 0) {
-      //     // 混音
-      //     var audioMixConfig = {
-      //       streamId: _config.idName,
-      //       effectId: 1,
-      //       loop: false,
-      //       replace: true
-      //     }
-      //     // var url = './assets/applaud.mp3';
-      //     //var url = 'https://bpic.588ku.com/audio_copy/audio/18/08/24/9841faee97016cdd91720970fd984204.mp3';
-      //     var url = 'https://kfjigou.yjbtest.com:9999/api/mp3/blink.mp3';
-      //     //          zg.preloadEffect(1, url, ()=> {
-      //     //            console.log('music preolad');
-      //     //         console.log("加入房间混音状态:" + zg.ac.state);
-      //     //            zg.playEffect(audioMixConfig, () => {
-      //     //              console.warn('start play')
-      //     //            console.log("正在混音:" + zg.ac.state);
-      //     //            }, () => {
-      //     //              console.warn('play end');
-      //     //           console.log("混音结束后:" + zg.ac.state);
-      //     //             zg.unloadEffect(1,_config.idName);
-      //     //           })
-      //     //         });
-      //   }
+      // let videoCodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
+      // if (videoCodeType) {
+      //   // const extraInfo = { videoCodeType };
+      //   // 根据检测结果选择推流的编码格式并带上流附加消息
+      //   zg.startPublishingStream(streamId, localVideo, "", {
+      //     videoDecodeType: videoCodeType
+      //   });
+      // } else {
+      //   console.error('没有可用视频编码类型');
       // }
 
-      // 	    zg.unloadEffect(1,_config.idName);
-    }, () => {
-      console.error('获取 sdp 失败');
+    }, (err) => {
+      console.error('预览失败', err);
     });
+
+    // 直接推流
+    // ZegoClient.supportVideoCodeType(({
+    //   H264,
+    //   VP8,
+    //   Vp9,
+    //   H265
+    // }) => {
+    //   // 开启预览
+    //   zg.startPreview(localVideo, previewConfig, () => {
+    //     isPreviewed = true;
+    //     let videoCodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
+    //     //        let videoCodeType = 'H264';
+    //     if (videoCodeType) {
+    //       const extraInfo = { videoCodeType };
+    //       // 根据检测结果选择推流的编码格式并带上流附加消息
+    //       zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
+    //         videoDecodeType: videoCodeType
+    //       });
+    //     } else {
+    //       console.error('没有可用视频编码类型');
+    //     }
+
+    //   }, (err) => {
+    //     console.error('预览失败', err);
+    //   });
+
+    //   zg.onStreamUpdated = (type, streamListAfter) => {
+    //     if (type == 0) {
+    //       recordConfig.remoteUserid = streamListAfter[0].user_id
+    //       let { stream_id, extra_info } = streamListAfter[0];
+    //       let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
+    //       zg.startPlayingStream(stream_id, remoteVideo, '', {
+    //         videoDecodeType: videoCodeType
+    //       });
+    //       // remoteVideo.muted = false;
+    //     } else {
+    //       // 收到流删除后退出
+    //       leaveRoom();
+    //     }
+    //   }
+
+    //   // zg.onPublishStateUpdate = (type, streamid, error) => {
+
+    //   //   console.log("type == " + type);
+    //   //   console.log("streamid == " + streamid)
+    //   //   console.log("error == " + error);
+
+    //   //   if (type === 1 && publishTryCount === 0) {
+    //   //     publishTryCount++;
+    //   //     let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
+    //   //     if (videCodeType) {
+    //   //       zg.stopPublishingStream(streamid);
+    //   //       const extraInfo = { videCodeType };
+    //   //       zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
+    //   //         videoDecodeType: videCodeType
+    //   //       });
+    //   //     } else {
+    //   //       console.error('没有可用视频编码类型');
+    //   //     }
+    //   //   }
+
+
+    //   //   if (type == 0) {
+    //   //     // 混音
+    //   //     var audioMixConfig = {
+    //   //       streamId: _config.idName,
+    //   //       effectId: 1,
+    //   //       loop: false,
+    //   //       replace: true
+    //   //     }
+    //   //     // var url = './assets/applaud.mp3';
+    //   //     //var url = 'https://bpic.588ku.com/audio_copy/audio/18/08/24/9841faee97016cdd91720970fd984204.mp3';
+    //   //     var url = 'https://kfjigou.yjbtest.com:9999/api/mp3/blink.mp3';
+    //   //     //          zg.preloadEffect(1, url, ()=> {
+    //   //     //            console.log('music preolad');
+    //   //     //         console.log("加入房间混音状态:" + zg.ac.state);
+    //   //     //            zg.playEffect(audioMixConfig, () => {
+    //   //     //              console.warn('start play')
+    //   //     //            console.log("正在混音:" + zg.ac.state);
+    //   //     //            }, () => {
+    //   //     //              console.warn('play end');
+    //   //     //           console.log("混音结束后:" + zg.ac.state);
+    //   //     //             zg.unloadEffect(1,_config.idName);
+    //   //     //           })
+    //   //     //         });
+    //   //   }
+    //   // }
+
+    //   // 	    zg.unloadEffect(1,_config.idName);
+    // }, () => {
+    //   console.error('获取 sdp 失败');
+    // });
 
   } else {
     console.error('场景不适用');
