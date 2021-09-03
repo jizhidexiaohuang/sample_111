@@ -942,12 +942,12 @@ function startVideoTalk({
   } else if (role === 0) { // 用户端
 
     // 直接推流
-    // ZegoClient.supportVideoCodeType(({
-    //   H264,
-    //   VP8,
-    //   Vp9,
-    //   H265
-    // }) => {
+    ZegoClient.supportVideoCodeType(({
+      H264,
+      VP8,
+      Vp9,
+      H265
+    }) => {
       // 开启预览
       zg.startPreview(localVideo, previewConfig, () => {
         isPreviewed = true;
@@ -1030,9 +1030,9 @@ function startVideoTalk({
       // }
 
 // 	    zg.unloadEffect(1,_config.idName);
-    // }, () => {
-    //   console.error('获取 sdp 失败');
-    // });
+    }, () => {
+      console.error('获取 sdp 失败');
+    });
 
   } else {
     console.error('场景不适用');
