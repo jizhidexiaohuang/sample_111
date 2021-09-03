@@ -912,7 +912,6 @@ function startVideoTalk({
 	console.log("推流了:"+streamId)
       }  // 等待客户推流
       zg.onStreamUpdated = (type, streamListAfter) => {
-        console.log('监听到客户推流---')
         let { stream_id, extra_info } = streamListAfter[0];
         let videoCodeType = extra_info ? JSON.parse(extra_info).videoCodeType : 'H264';
         if (type == 0) {
@@ -951,7 +950,7 @@ function startVideoTalk({
       // 开启预览
       zg.startPreview(localVideo, previewConfig, () => {
         isPreviewed = true;
-        let videoCodeType = 'H264';
+        let videoCodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
 //        let videoCodeType = 'H264';
         if (videoCodeType) {
           const extraInfo = { videoCodeType };
@@ -982,35 +981,35 @@ function startVideoTalk({
         }
       }
 
-      // zg.onPublishStateUpdate = (type, streamid, error) => {
+      zg.onPublishStateUpdate = (type, streamid, error) => {
 
-      //   console.log("type == "+type);
-      //   console.log("streamid == "+streamid)
-      //   console.log("error == "+ error);
+        console.log("type == "+type);
+        console.log("streamid == "+streamid)
+        console.log("error == "+ error);
 
-      //   if (type === 1 && publishTryCount === 0) {
-      //     publishTryCount++;
-      //     let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
-      //     if (videCodeType) {
-      //       zg.stopPublishingStream(streamid);
-      //       const extraInfo = { videCodeType };
-      //       zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
-      //         videoDecodeType: videCodeType
-      //       });
-      //     } else {
-      //       console.error('没有可用视频编码类型');
-      //     }
-      //   }
+        if (type === 1 && publishTryCount === 0) {
+          publishTryCount++;
+          let videCodeType = H264 ? 'H264' : (VP8 ? 'VP8' : null);
+          if (videCodeType) {
+            zg.stopPublishingStream(streamid);
+            const extraInfo = { videCodeType };
+            zg.startPublishingStream(streamId, localVideo, JSON.stringify(extraInfo), {
+              videoDecodeType: videCodeType
+            });
+          } else {
+            console.error('没有可用视频编码类型');
+          }
+        }
 
 
-      //   if(type == 0){
-      //     // 混音
-      //     var audioMixConfig = {
-      //       streamId: _config.idName,
-      //       effectId: 1,
-      //       loop: false,
-      //       replace: true
-      //     }
+        if(type == 0){
+          // 混音
+          var audioMixConfig = {
+            streamId: _config.idName,
+            effectId: 1,
+            loop: false,
+            replace: true
+          }
           // var url = './assets/applaud.mp3';
           //var url = 'https://bpic.588ku.com/audio_copy/audio/18/08/24/9841faee97016cdd91720970fd984204.mp3';
             var url = 'https://kfjigou.yjbtest.com:9999/api/mp3/blink.mp3';
@@ -1026,8 +1025,8 @@ function startVideoTalk({
  //             zg.unloadEffect(1,_config.idName);
  //           })
  //         });
-      //   }
-      // }
+        }
+      }
 
 // 	    zg.unloadEffect(1,_config.idName);
     }, () => {
