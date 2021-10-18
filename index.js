@@ -344,7 +344,7 @@ function play(streamId, video) {
 
   } else {
     video.muted = false;
-    video.play();
+    // video.play();
   }
 
 }
